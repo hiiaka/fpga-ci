@@ -4,6 +4,10 @@
 
 FROM tethys/build-yocto
 
+# Copy in the license file
+RUN mkdir /home/build/.Xilinx
+COPY Xilinx.lic /home/build/.Xilinx/
+
 USER root
 
 # Vivado version
@@ -21,7 +25,8 @@ ADD install_config.txt /tmp/
 RUN apt-get -y install curl nano vim libsdl1.2-dev xterm
 
 # Install Vivado
-RUN /tmp/${VIV_DIR}/xsetup --agree XilinxEULA,3rdPartyEULA,WebTalkTerms --batch Install --config /tmp/install_config.txt 
+RUN /tmp/${VIV_DIR}/xsetup --agree XilinxEULA,3rdPartyEULA,WebTalkTerms --batch Install --config /tmp/install_config.txt && rm -r /tmp/${VIV_DIR}
+RUN echo "source /opt/Xilinx/Vivado/${VIV_MAIN_VER}/settings64.sh" >> /home/build/.bashrc
 
 # Define container entry point
 ENTRYPOINT ["/bin/bash"]

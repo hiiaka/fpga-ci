@@ -19,12 +19,12 @@ if docker inspect $CONTAINER >/dev/null 2>&1; then
 else
     echo -e "\nINFO: Creating a new container from image $IMAGE\n"
     docker run -t -i \
+        --user=build \
         --volume=$SHAREDDIR:/shared \
         --name=$CONTAINER \
         $IMAGE
 fi
 
-# /bin/sh -c "screen -s /bin/bash"
 
 exit $?
 
