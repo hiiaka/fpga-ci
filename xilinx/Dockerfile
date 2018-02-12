@@ -28,6 +28,14 @@ RUN apt-get -y install curl nano vim libsdl1.2-dev xterm
 RUN /tmp/${VIV_DIR}/xsetup --agree XilinxEULA,3rdPartyEULA,WebTalkTerms --batch Install --config /tmp/install_config.txt && rm -r /tmp/${VIV_DIR}
 RUN echo "source /opt/Xilinx/Vivado/${VIV_MAIN_VER}/settings64.sh" >> /home/build/.bashrc
 
+# Get Digilent board files
+RUN git clone https://github.com/Digilent/vivado-boards && \
+    cp -r vivado-boards/new/board_files/arty-z7-20/ \
+          vivado-boards/new/board_files/zybo \
+          vivado-boards/new/board_files/zybo-z7-20 \
+          /opt/Xilinx/Vivado/${VIV_MAIN_VER}/data/boards/board_files && \
+    rm -r vivado-boards
+
 # Define container entry point
 ENTRYPOINT ["/bin/bash"]
 
